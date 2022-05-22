@@ -1,0 +1,115 @@
+#include <LiquidCrystal_I2C.h>
+LiquidCrystal_I2C lcd(0x27, 16, 2); //set LCD address
+
+const int sensor = A0;     //inisialisasi pin sensor      di A0
+const int relay = 5;       //inisialisasi pin relay       di pin 5
+const int ledGreen = 4;    //inisialisasi pin led hijau   di pin 6
+const int ledYellow = 3;   //inisialisasi pin led kuning  di pin 4
+const int ledRed = 2;      //inisialisasi pin merah       di pin 3
+const int pompa = 7;       //inisialisasi pin pompa air   di pin 2
+
+//Set mode tiap pin dan dijalankan satu kali ketika alat di-reset
+void setup() {
+lcd.begin(16,2);
+Serial.begin(9600);
+lcd.init();                   //inisialisasi LCD
+lcd.backlight();              //Print pesan ke LCD
+
+//pinMode(lcd, OUTPUT);       //Jadikan pin power 
+//digitalWrite(powerPin, LOW); //default bernilai LOW
+
+pinMode(sensor, INPUT);       //menetapkan pin A0 sebagai input
+pinMode(relay, OUTPUT);       //menetapkan pin 5 sebagai output
+pinMode(ledGreen, OUTPUT);    //menetapkan pin 4 sebagai output
+pinMode(ledYellow, OUTPUT);   //menetapkan pin 3 sebagai output
+pinMode(ledRed, OUTPUT);      //menetapkan pin 2 sebagai output
+}
+
+void loop() {
+float dataAnalog = analogRead (sensor);  //membaca nilai dari pin sensor
+//lcd.print ("Kelembaban : ");
+//lcd.print (dataAnalog);
+
+//jika nilai A0 kurang dari 500, print kata serta nyalakan led hijau dan matikan led kuning, merah dan juga relay
+if (dataAnalog < 500) {     //nilai awalnya 500 (jika nilainya kecil/500 dan tanah sedikit basah maka relay off)
+  lcd.print("Status: Media Masih Basah");  //tampilkan status media pada LCD
+  lcd.print("");                         //menampilkan nilai kelembaban media
+  lcd.clear();
+  digitalWrite (relay, LOW);                 //(jika nilainya besar/1500 dan tanah sedikit basah maka relay on)
+  digitalWrite (ledGreen, HIGH);
+  digitalWrite (ledYellow, LOW);
+  digitalWrite (ledRed, LOW);
+  pinMode(pompa, LOW);
+
+  lcd.setCursor(0,0);
+  lcd.print("Kelembaban: ");
+  lcd.setCursor(13,0);
+  lcd.print (dataAnalog);
+  lcd.setCursor(0,1);
+  lcd.print("Media Basah");
+  //lcd.scrollDisplayLeft();
+  delay(500);
+  //lcd.clear();
+  //lcd.setCursor(4,0);
+  //lcd.print("Kelompok 4");
+  //lcd.setCursor(5,1);
+  //lcd.print("Embedded System");
+  //lcd.clear();
+  //delay(1000);
+  }
+
+ //tetapi, jika nilai A0 kurang dari 900, print kata serta nyalakan led kuning dan relay kemudian matikan led hijau dan juga merah
+ else if (dataAnalog  < 900) {
+  lcd.setCursor(0,0);
+  lcd.print("Status: Media Cukup Basah");  //tampilkan status media pada LCD
+  lcd.scrollDisplayLeft();
+  lcd.clear();
+  lcd.print("");                         //menampilkan nilai kelembaban media
+  digitalWrite (relay, LOW);
+  digitalWrite (ledGreen, LOW);
+  digitalWrite (ledYellow, HIGH);
+  digitalWrite (ledRed, LOW);
+  pinMode(pompa, HIGH);
+
+  lcd.setCursor(0,0);
+  lcd.print("Kelembaban: ");
+  lcd.print (dataAnalog);
+  lcd.setCursor(0,1);
+  lcd.print("Cukup Basah ");
+  //lcd.scrollDisplayLeft();
+  delay(500);
+  //lcd.clear();
+  //lcd.setCursor(4,0);
+  //lcd.print("Kelompok 4");
+  //lcd.setCursor(5,1);
+  //lcd.print("Embedded System");
+  //lcd.clear();
+  //delay(1000);
+ }
+
+ //selain dari itu, hanya nyalakan led merah dan juga relay
+ //kondisi terakhir menyatakan media kering dan men-trigger pompa air
+ else{
+  lcd.print("");                         //menampilkan nilai kelembaban media
+  digitalWrite (relay, HIGH);
+  digitalWrite (ledGreen, LOW);
+  digitalWrite (ledYellow, LOW);
+  digitalWrite (ledRed, HIGH);
+  pinMode(pompa, HIGH);
+
+  lcd.setCursor(0,0);
+  lcd.print("Kelembaban: ");
+  lcd.print (dataAnalog,2);
+  lcd.setCursor(0,1);
+  lcd.print("Media Kering");
+  //lcd.scrollDisplayLeft();
+  delay(500);
+  //lcd.clear();
+  //lcd.setCursor(4,0);
+  //lcd.print("Kelompok 4");
+  //lcd.setCursor(1,1);
+  //lcd.print("Embedded System");
+  //lcd.clear();
+  //delay(1000);
+  }
+}
