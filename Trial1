@@ -3,9 +3,9 @@ LiquidCrystal_I2C lcd(0x27, 16, 2); //set LCD address
 
 const int sensor = A0;     //inisialisasi pin sensor      di A0
 const int relay = 5;       //inisialisasi pin relay       di pin 5
-const int ledGreen = 4;    //inisialisasi pin led hijau   di pin 6
-const int ledYellow = 3;   //inisialisasi pin led kuning  di pin 7
-const int ledRed = 2;      //inisialisasi pin merah       di pin 8
+const int ledGreen = 4;    //inisialisasi pin led hijau   di pin 4
+const int ledYellow = 3;   //inisialisasi pin led kuning  di pin 3
+const int ledRed = 2;      //inisialisasi pin merah       di pin 2
 const int pompa = 7;       //inisialisasi pin pompa air   di pin 7
 
 //Set mode tiap pin dan dijalankan satu kali ketika alat di-reset
@@ -19,9 +19,9 @@ lcd.backlight();              //Print pesan ke LCD
 Serial.begin (4800);          //memanggil serial monitor dengan baudrate 4800
 pinMode(sensor, INPUT);       //menetapkan pin A0 sebagai input
 pinMode(relay, OUTPUT);       //menetapkan pin 5 sebagai output
-pinMode(ledGreen, OUTPUT);    //menetapkan pin 6 sebagai output
-pinMode(ledYellow, OUTPUT);   //menetapkan pin 7 sebagai output
-pinMode(ledRed, OUTPUT);      //menetapkan pin 8 sebagai output
+pinMode(ledGreen, OUTPUT);    //menetapkan pin 4 sebagai output
+pinMode(ledYellow, OUTPUT);   //menetapkan pin 3 sebagai output
+pinMode(ledRed, OUTPUT);      //menetapkan pin 2 sebagai output
 }
 
 void loop() {
