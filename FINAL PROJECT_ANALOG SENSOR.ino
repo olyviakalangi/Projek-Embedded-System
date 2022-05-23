@@ -20,37 +20,32 @@ void loop()
   Serial.println(dataAnalog);       //Jika ingin melihat melalui serial monitor
   persentase = map(dataAnalog, nilaiTerendah, nilaiTertinggi, 0, 100);  //Membuat nilai analog menjadi digital
   Serial.println(persentase);
- 
+
+  //Cetak tulisan dan persentase kekeringan
+  lcd.setCursor(0,0);
+  lcd.print("Kekeringan: ");
+  lcd.print(persentase);
+  lcd.print("%");
+
   if(dataAnalog>=870)               //Relay Digital (2 output: ON/OFF; Indikator 0 = Basah dan 1 = Kering
   {
-    lcd.setCursor(0,0);
-    lcd.print("Kekeringan: ");
-    lcd.print(persentase);
-    lcd.print("%");
     lcd.setCursor(0,1);
     lcd.print("= Media Kering =");
     digitalWrite(pompa,1);
   }
   else if(dataAnalog>=500 && dataAnalog<=850)          //Relay Digital (2 output: ON/OFF; Indikator 0 = Basah dan 1 = Kering
   {
-    lcd.setCursor(0,0);
-    lcd.print("Kekeringan: ");
-    lcd.print(persentase);
-    lcd.print("%");
     lcd.setCursor(0,1);
     lcd.print("= Media Medium =");
     digitalWrite(pompa,0);
   }
   else if(dataAnalog<=450)
   {
-    lcd.setCursor(0,0);
-    lcd.print("Kekeringan: ");
-    lcd.print(persentase);
-    lcd.print("%");
     lcd.setCursor(0,1);
     lcd.print("= Media  Basah =");
     digitalWrite(pompa,0);
   }
+  
   delay(5000);
   lcd.clear();
   lcd.setCursor(4,0);
